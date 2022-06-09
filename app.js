@@ -79,38 +79,6 @@ app.get('/th/:id', (req, res) => {
 
 });
 
-app.get('/th/payed/:id', (req, res) => {
-
-    let tables = "transactions";
-    let key = req.params.id;
-
-    let query = "SELECT * FROM ?? WHERE user_id = ? AND payed = 1" 
-
-    con.query(query, [tables, key], (err, results) => {
-
-        if(err) throw err;
-
-        if(results != null){
-
-            for(let result of results){
-                let year = result.transaction_date.getFullYear().toString();
-                let month = result.transaction_date.getMonth().toString().padStart(2, '0');
-                let day = result.transaction_date.getDate().toString().padStart(2, '0');
-                
-                result.transaction_date = day + '/' + month + '/' + year;
-            }
-
-            console.log("transaction header response");
-            console.log(JSON.stringify(results));
-            res.status(200).send(JSON.stringify(results));
-        } else{
-            res.status(404).send();
-        }
-
-    });
-
-});
-
 app.get('/td/:id', (req, res) => {
 
     let tables = "transaction_details";
@@ -160,7 +128,7 @@ app.get('/it/:id', (req, res) => {
 
 app.get('/topup/user/:id', (req, res) => {
 
-    let tables = "topup";
+    let tables = "topups";
     let id = req.params.id;
 
     let query = "SELECT * FROM ?? WHERE user_id = ?";
@@ -171,6 +139,80 @@ app.get('/topup/user/:id', (req, res) => {
 
         if(results != null){
             console.log("top up by user_id response");
+            console.log(JSON.stringify(results));
+            res.status(200).send(JSON.stringify(results));
+        } else{
+            res.status(404).send();
+        }
+
+    });
+
+});
+
+app.get('/outcome/:id', (req, res) => {
+
+    let today = new Date();
+    let dateLim = new Date(new Date().setDate(today.getDate() - 30));
+
+    let tables = "transactions";
+    let key = req.params.id;
+
+    let year = dateLim.getFullYear().toString();
+    let month = (dateLim.getMonth() + 1).toString().padStart(2, '0');
+    let day = dateLim.getDate().toString().padStart(2, '0');
+
+    dateLim = "'" + year + '/' + month + '/' + day + "'";
+
+    let query = "SELECT * FROM ?? WHERE user_id = ? AND payed = 1 AND transaction_date > " + dateLim; 
+
+    con.query(query, [tables, key], (err, results) => {
+
+        if(err) throw err;
+
+        if(results != null){
+
+            for(let result of results){
+                year = result.transaction_date.getFullYear().toString();
+                month = (result.transaction_date.getMonth() + 1).toString().padStart(2, '0');
+                day = result.transaction_date.getDate().toString().padStart(2, '0');
+                
+                result.transaction_date = day + '/' + month + '/' + year;
+            }
+
+            console.log("transaction header response");
+            console.log(JSON.stringify(results));
+            res.status(200).send(JSON.stringify(results));
+        } else{
+            res.status(404).send();
+        }
+
+    });
+
+});
+
+app.get('/income/:id', (req, res) => {
+
+    let today = new Date();
+    let dateLim = new Date(new Date().setDate(today.getDate() - 30));
+
+    let tables = "topups";
+    let key = req.params.id;
+
+    let year = dateLim.getFullYear().toString();
+    let month = (dateLim.getMonth() + 1).toString().padStart(2, '0');
+    let day = dateLim.getDate().toString().padStart(2, '0');
+
+    dateLim = "'" + year + '/' + month + '/' + day + "'";
+
+    let query = "SELECT * FROM ?? WHERE user_id = ? AND topup_date > " + dateLim; 
+
+    con.query(query, [tables, key], (err, results) => {
+
+        if(err) throw err;
+
+        if(results != null){
+
+            console.log("topup response");
             console.log(JSON.stringify(results));
             res.status(200).send(JSON.stringify(results));
         } else{
@@ -230,6 +272,7 @@ app.get('/canteens/:id', (req, res) => {
 
 });
 
+app.get('/topup/user/')
 
 app.listen(8000, () => {
     console.log('listening on port 8000');
