@@ -272,8 +272,6 @@ app.get('/canteens/:id', (req, res) => {
 
 });
 
-app.get('/topup/user/')
-
 app.listen(8000, () => {
     console.log('listening on port 8000');
 });
