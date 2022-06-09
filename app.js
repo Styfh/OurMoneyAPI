@@ -9,7 +9,8 @@ var con = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "",
-    database: "ourmoney"
+    database: "ourmoney",
+    multipleStatements: true
 });
 
 con.connect((err) => {
@@ -183,17 +184,44 @@ app.get('/topup/user/:id', (req, res) => {
 app.post('/pay', (req, res) => {
 
     let tables = "transactions";
-    let key = req.body.id;
+    let trans_key = req.body.trans_id;
+    let query1 = "UPDATE ?? SET payed = 1 WHERE transaction_id = ?; ";
 
-    let query = "UPDATE ?? SET payed = 1 WHERE transaction_id = ?";
+    let query2table = "users";
+    let newBalance =  req.body.new_balance;
+    let user_id = req.body.user_id;
+    let query2 = "UPDATE ?? SET user_balance = ? WHERE user_id = ?;";
 
-    con.query(query, [tables, key], (err, result) => {
+    let query = query1 + query2;
+
+    con.query(query, [tables, trans_key, query2table, newBalance, user_id], (err, results) => {
 
         if(err) throw err;
 
-        if(result.length != 0){
-            console.log("updating to payed");
-            res.status(200).send();
+        if(results[0].length != 0 && results[1].length){
+            console.log("update successful");
+            res.status(200).send("transaction status and user balance updated");
+        } else{
+            res.status(204).send("error occured");
+        }
+
+    });
+});
+
+app.get('/canteens/:id', (req, res) => {
+
+    let table = "canteens";
+    let canteen_id = req.params.id;
+    let query = "SELECT * FROM ?? WHERE canteen_id = ?";
+
+    con.query(query, [table, canteen_id], (err, result) => {
+
+        if(err) throw err;
+
+        if(result != null){
+            console.log("canteen response");
+            console.log(JSON.stringify(result[0]));
+            res.status(200).send(JSON.stringify(result[0]));
         } else{
             res.status(204).send();
         }
@@ -201,6 +229,7 @@ app.post('/pay', (req, res) => {
     });
 
 });
+
 
 app.listen(8000, () => {
     console.log('listening on port 8000');
