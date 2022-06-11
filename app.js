@@ -272,6 +272,52 @@ app.get('/canteens/:id', (req, res) => {
 
 });
 
+app.get('/title/equipped/:id', (req, res) => {
+
+    let table = "user_titles";
+    let user_id = req.params.id;
+
+    let query = "SELECT * FROM ?? WHERE user_id = ?";
+
+    con.query(query, [table, user_id], (err, results) => {
+
+        if(err) throw err;
+
+        if(results != null){
+            console.log("equipped title response");
+            console.log(JSON.stringify(results[results.length - 1]));
+            res.status(200).send(JSON.stringify(results[results.length - 1]));
+        } else{
+            res.status(204).send();
+        }
+
+    });
+
+});
+
+app.get('/title/:id', (req, res) => {
+
+    let table = "titles";
+    let title_id = req.params.id;
+
+    let query = "SELECT * FROM ?? WHERE title_id = ?";
+
+    con.query(query, [table, title_id], (err, results) => {
+
+        if(err) throw err;
+
+        if(results != null){
+            console.log("title response");
+            console.log(JSON.stringify(results[0]));
+            res.status(200).send(JSON.stringify(results[0]))
+        } else{
+            res.status(204).send();
+        }
+
+    });
+
+});
+
 app.listen(8000, () => {
     console.log('listening on port 8000');
 });
