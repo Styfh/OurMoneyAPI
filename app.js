@@ -341,6 +341,29 @@ app.get('/title/:id', (req, res) => {
 
 });
 
+app.post('/title/unlock', (req, res) => {
+
+    let table = "user_titles";
+    let user_id = req.body.user_id;
+    let title_id = req.body.title_id;
+
+    let query = "INSERT INTO ?? (title_id, user_id) VALUES (?, ?);"
+
+    con.query(query, [table, title_id, user_id], (err, result) => {
+
+        if(err) throw err;
+
+        if(result.length != 0){
+            console.log("title unlock success");
+            res.status(200).send();
+        } else{
+            res.status(204).send();
+        }
+
+    });
+
+});
+
 app.listen(8000, () => {
     console.log('listening on port 8000');
 });
