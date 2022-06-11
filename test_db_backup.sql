@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 09, 2022 at 05:46 PM
+-- Generation Time: Jun 11, 2022 at 06:19 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -255,35 +255,35 @@ INSERT INTO `users` (`user_id`, `email`, `password`, `full_name`, `student_id`, 
 
 CREATE TABLE `user_titles` (
   `title_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `equipped` tinyint(1) NOT NULL
+  `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `user_titles`
 --
 
-INSERT INTO `user_titles` (`title_id`, `user_id`, `equipped`) VALUES
-(1111, 1, 0),
-(1111, 2, 0),
-(1111, 3, 0),
-(1111, 4, 1),
-(1111, 5, 0),
-(1112, 1, 1),
-(1112, 2, 0),
-(1112, 4, 0),
-(1112, 5, 1),
-(1113, 2, 0),
-(1113, 3, 0),
-(1113, 4, 0),
-(1113, 5, 0),
-(1114, 2, 0),
-(1114, 3, 1),
-(1115, 2, 0),
-(1116, 2, 0),
-(1117, 2, 0),
-(1118, 2, 0),
-(1119, 2, 1);
+INSERT INTO `user_titles` (`title_id`, `user_id`) VALUES
+(1111, 1),
+(1111, 2),
+(1111, 3),
+(1111, 4),
+(1111, 5),
+(1112, 1),
+(1112, 2),
+(1112, 3),
+(1112, 4),
+(1112, 5),
+(1113, 2),
+(1113, 3),
+(1113, 4),
+(1113, 5),
+(1114, 2),
+(1114, 3),
+(1115, 2),
+(1116, 2),
+(1117, 2),
+(1118, 2),
+(1119, 2);
 
 --
 -- Indexes for dumped tables
