@@ -295,6 +295,29 @@ app.get('/title/equipped/:id', (req, res) => {
 
 });
 
+app.get('/title/locked/:id', (req, res) => {
+
+    let table = "titles";
+    let title_id = req.params.id;
+
+    let query = "SELECT * FROM ?? WHERE title_id > ?"
+    
+    con.query(query, [table, title_id], (err, results) => {
+        
+        if(err) throw err;
+
+        if(results != null){
+            console.log("locked titles response");
+            console.log(JSON.stringify(results));
+            res.status(200).send(JSON.stringify(results));
+        } else{
+            res.status(204).send();
+        }
+
+    });
+
+});
+
 app.get('/title/:id', (req, res) => {
 
     let table = "titles";
